@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-04-15T01:14:08.758Z</updated>
+  <updated>2022-04-15T07:08:34.323Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="http://example.com/2022/04/14/%E5%A4%B4%E8%84%91%E9%A3%8E%E6%9A%B4%E4%B9%8B%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/"/>
     <id>http://example.com/2022/04/14/%E5%A4%B4%E8%84%91%E9%A3%8E%E6%9A%B4%E4%B9%8B%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/</id>
     <published>2022-04-14T12:12:34.000Z</published>
-    <updated>2022-04-15T01:14:08.758Z</updated>
+    <updated>2022-04-15T07:08:34.323Z</updated>
     
     <content type="html"><![CDATA[<h1 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h1><h2 id="拿到公司名"><a href="#拿到公司名" class="headerlink" title="拿到公司名"></a>拿到公司名</h2><ul><li><p>股权</p></li><li><p>邮箱</p></li><li><p>真实IP</p></li><li><p>企业族谱</p></li><li><p>备案</p></li><li><p>子域名</p></li></ul><h3 id="企业信息"><a href="#企业信息" class="headerlink" title="企业信息"></a>企业信息</h3><ul><li><p>爱企查</p></li><li><p>企查查</p></li></ul><h3 id="员工敏感信息"><a href="#员工敏感信息" class="headerlink" title="员工敏感信息"></a>员工敏感信息</h3><ul><li><p>Google语法（邮箱）</p></li><li><p>GitHub（也是语法）</p></li><li><p>网站信息</p></li><li><p>企业内部群</p></li><li><p>百度贴吧</p></li><li><p>各种网盘        <em>（既能钓鱼，也能做社工字典）</em></p></li></ul><h3 id="企业族谱"><a href="#企业族谱" class="headerlink" title="企业族谱"></a>企业族谱</h3><ul><li>占股&gt;80%属于企业资产</li><li>爱企查、企查查、天眼查     &#x3D;&#x3D;&gt;&gt;   网站、域名、邮箱、子公司、业务范围、法人泄露</li></ul><h3 id="备案"><a href="#备案" class="headerlink" title="备案"></a>备案</h3><ul><li>证据的收集（目的是证明这个域名归属）</li></ul><h2 id="主动信息收集（直接与业务碰撞）"><a href="#主动信息收集（直接与业务碰撞）" class="headerlink" title="主动信息收集（直接与业务碰撞）"></a>主动信息收集（直接与业务碰撞）</h2><h3 id="waf"><a href="#waf" class="headerlink" title="waf"></a>waf</h3><ul><li>靶场的waf只能叫做过滤器，并不是真正意义上的waf</li><li>软件waf</li><li>硬件waf</li><li>云waf</li></ul><p><em>除了靶场的 filter，其他都会规则更新</em></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">waf的存在会使得payload无法正确地执行，很多漏洞无法真正探测</span><br></pre></td></tr></table></figure><h3 id="拦截设备（自动封IP）"><a href="#拦截设备（自动封IP）" class="headerlink" title="拦截设备（自动封IP）"></a>拦截设备（自动封IP）</h3><p>直接封死（代理池）</p><h3 id="子域名"><a href="#子域名" class="headerlink" title="子域名"></a>子域名</h3><ul><li>google</li><li>fofa</li><li>zoomeye</li><li>shodan</li><li>C段</li><li>情报在线</li><li>经典爆破</li><li>公网公开数据</li><li>证书透明度</li><li>dns历史解析</li><li>github</li><li>微步</li></ul><h3 id="指纹"><a href="#指纹" class="headerlink" title="指纹"></a>指纹</h3><ul><li>潮汐</li><li>fofa看ico的hash</li><li>框架指定目录结构（Xray：发最少的包，实现相关漏洞检测）</li></ul><h3 id="真实IP"><a href="#真实IP" class="headerlink" title="真实IP"></a>真实IP</h3><ul><li>是：邮箱服务器、C段、同IP网段、查看日志、waf、子域名、host文件、国外代理</li><li>否：渗透</li></ul>]]></content>
     
