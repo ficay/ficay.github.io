@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>应急响应-Windows挖矿病毒处置</title>
+      <link href="/2022/04/18/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94-Windows%E6%8C%96%E7%9F%BF%E7%97%85%E6%AF%92%E5%A4%84%E7%BD%AE/"/>
+      <url>/2022/04/18/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94-Windows%E6%8C%96%E7%9F%BF%E7%97%85%E6%AF%92%E5%A4%84%E7%BD%AE/</url>
+      
+        <content type="html"><![CDATA[<ul><li><strong>先看资源管理器查看CPU、GPU利用情况，无异常，再查看网络连接情况：</strong></li></ul><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netstat <span class="literal">-ano</span></span><br></pre></td></tr></table></figure><ul><li><strong>发现192.168.27.81这台机器一直在请求公网地址，向远程IP的7001端口发送请求，进程PID为1228。</strong></li></ul><p><img src="/2022/04/18/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94-Windows%E6%8C%96%E7%9F%BF%E7%97%85%E6%AF%92%E5%A4%84%E7%BD%AE/image-20220418110513989.png" alt="image-20220418110513989"></p><ul><li><strong>PChunter查看该进程：</strong></li></ul><p><img src="/2022/04/18/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94-Windows%E6%8C%96%E7%9F%BF%E7%97%85%E6%AF%92%E5%A4%84%E7%BD%AE/image-20220418110645906.png" alt="image-20220418110645906"></p><ul><li><strong>结束进程后再查看网络连接情况，发现已经不再请求公网IP，定位到文件所在位置：</strong></li></ul><p><img src="/2022/04/18/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94-Windows%E6%8C%96%E7%9F%BF%E7%97%85%E6%AF%92%E5%A4%84%E7%BD%AE/image-20220418111255210.png" alt="image-20220418111255210"></p><ul><li><strong>当尝试删除该exe文件时，显示已在另一文件打开，先对该exe文件进行扫描，确实是威胁，如下：</strong></li></ul><p><img src="/2022/04/18/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94-Windows%E6%8C%96%E7%9F%BF%E7%97%85%E6%AF%92%E5%A4%84%E7%BD%AE/image-20220418112701894.png" alt="image-20220418112701894"></p><ul><li><strong>再全盘扫描，共发现三个威胁文件</strong></li></ul><p><img src="/2022/04/18/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94-Windows%E6%8C%96%E7%9F%BF%E7%97%85%E6%AF%92%E5%A4%84%E7%BD%AE/image-20220418114542105.png" alt="image-20220418114542105"></p><ul><li><strong>先结束进程，将三个文件删除后，再次扫描：</strong></li></ul><p><img src="/2022/04/18/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94-Windows%E6%8C%96%E7%9F%BF%E7%97%85%E6%AF%92%E5%A4%84%E7%BD%AE/image-20220418114727296.png" alt="image-20220418114727296"></p><p>PChunter查看：</p><p><img src="/2022/04/18/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94-Windows%E6%8C%96%E7%9F%BF%E7%97%85%E6%AF%92%E5%A4%84%E7%BD%AE/image-20220418114905291.png" alt="image-20220418114905291"></p><p>结束进程后删除文件，再次扫描：</p><p><img src="/2022/04/18/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94-Windows%E6%8C%96%E7%9F%BF%E7%97%85%E6%AF%92%E5%A4%84%E7%BD%AE/image-20220418115038714.png" alt="image-20220418115038714"></p><ul><li><strong>重启机器，再查看网络连接情况，已恢复正常：</strong></li></ul><p><img src="/2022/04/18/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94-Windows%E6%8C%96%E7%9F%BF%E7%97%85%E6%AF%92%E5%A4%84%E7%BD%AE/image-20220418115354334.png" alt="image-20220418115354334"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 应急响应 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 应急响应 </tag>
+            
+            <tag> 挖矿病毒 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Web日志分析</title>
       <link href="/2022/04/15/Web%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/"/>
       <url>/2022/04/15/Web%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/</url>
