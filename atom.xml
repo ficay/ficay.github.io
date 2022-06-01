@@ -6,7 +6,7 @@
   <link href="http://ficay.github.io/atom.xml" rel="self"/>
   
   <link href="http://ficay.github.io/"/>
-  <updated>2022-04-18T04:02:08.395Z</updated>
+  <updated>2022-06-01T01:54:08.466Z</updated>
   <id>http://ficay.github.io/</id>
   
   <author>
@@ -15,6 +15,44 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>简单域渗透</title>
+    <link href="http://ficay.github.io/2022/06/01/%E7%AE%80%E5%8D%95%E5%9F%9F%E6%B8%97%E9%80%8F/"/>
+    <id>http://ficay.github.io/2022/06/01/%E7%AE%80%E5%8D%95%E5%9F%9F%E6%B8%97%E9%80%8F/</id>
+    <published>2022-06-01T01:54:08.000Z</published>
+    <updated>2022-06-01T01:54:08.466Z</updated>
+    
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>mimikatz工具使用</title>
+    <link href="http://ficay.github.io/2022/05/26/mimikatz%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/"/>
+    <id>http://ficay.github.io/2022/05/26/mimikatz%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/</id>
+    <published>2022-05-26T11:19:56.000Z</published>
+    <updated>2022-06-01T03:16:12.111Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="工具介绍"><a href="#工具介绍" class="headerlink" title="工具介绍"></a>工具介绍</h1><p>mimikatz的功能很多，最重要的是能从 lsass.exe进程中获取windows的账号及明文密码。</p><p>在 KB2871997 之前， Mimikatz 可以直接抓取明文密码。</p><p>当服务器安装 KB2871997 补丁后，系统默认禁用 Wdigest Auth ，内存（lsass进程）不再保存明文口令。Mimikatz 将读不到密码明文。<br>但由于一些系统服务需要用到 Wdigest Auth，所以该选项是可以手动开启的。（开启后，需要用户重新登录才能生效）</p><h1 id="工具使用"><a href="#工具使用" class="headerlink" title="工具使用"></a>工具使用</h1><h2 id="远程连接使用"><a href="#远程连接使用" class="headerlink" title="远程连接使用"></a>远程连接使用</h2><p>控制远程的服务器后，下载mimikatz，然后以管理员身份运行，否则会提示权限不够，在使用时注意32位和64位版本，用错版本可能会抓不到密码。</p><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">privilege::debug<span class="comment"># 提取权限</span></span><br><span class="line">sekurlsa::logonpasswords<span class="comment"># 抓取密码</span></span><br></pre></td></tr></table></figure><p><img src="/2022/05/26/mimikatz%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/image-20220601101031904.png" alt="image-20220601101031904"></p><p>抓到了administrator的账号，密码是null，说明没设密码，但最大的可能是没抓到密码。</p><p><img src="/2022/05/26/mimikatz%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/image-20220601101421118.png" alt="image-20220601101421118"></p><p>如果没抓到密码，可以尝试下面步骤：</p><ol><li><p>开启Wdigest Auth服务</p><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKLMSYSTEMCurrentControlSetControlSecurityProvidersWDigest /v UseLogonCredential /t REG_DWORD /d <span class="number">1</span> /f</span><br></pre></td></tr></table></figure></li><li><p>强制锁屏</p><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rundll32 user32.dll,LockWorkStation</span><br></pre></td></tr></table></figure></li><li><p>等待目标系统管理员重新登录</p></li><li><p>截取明文密码</p></li><li><p>关闭Wdigest Auth服务</p><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKLMSYSTEMCurrentControlSetControlSecurityProvidersWDigest /v UseLogonCredential /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure></li></ol><h2 id="本地使用"><a href="#本地使用" class="headerlink" title="本地使用"></a>本地使用</h2><p>在实际使用中，大多数的目标都会开防火墙，装杀毒软件，如360，火绒，nod32之类的话，可能就不能在对方电脑上使用mimikatz，这个时候只能本地使用。</p><p><img src="/2022/05/26/mimikatz%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/image-20220601103300275.png" alt="image-20220601103300275"></p><p>因为mimikatz是从 lsass.exe进程中获取windows的账号及密码的，我们可以在对方服务器安装一个procdump64.exe，这是微软自己的工具，不会被杀软拦截。然后从 lsass.exe进程里导出一个 包含账号密码信息的lsass.dmp 文件，再把这个dmp文件传回来，最后在自己的环境下运行mimikatz，从 dmp文件里读取信息。</p><p>具体操作如下：</p><ol><li><p>向目标上传procdump64.exe</p></li><li><p>运行procdump64.exe导出lsass.dmp（需管理员身份运行）</p><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">procdump64.exe <span class="literal">-accepteula</span> <span class="literal">-ma</span> lsass.exe lsass.dmp</span><br></pre></td></tr></table></figure><p><img src="/2022/05/26/mimikatz%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/image-20220601110121368.png" alt="image-20220601110121368"></p></li><li><p>将lsass.dmp传回本地</p></li><li><p>使用本地的mimikatz.exe读取lsass.dmp</p><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sekurlsa::minidump lsass.dmp</span><br><span class="line">sekurlsa::logonPasswords full</span><br></pre></td></tr></table></figure></li></ol><p><img src="/2022/05/26/mimikatz%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/image-20220601110718040.png" alt="image-20220601110718040"></p><p>可以看到mimikatz成功抓取到了当前用户john的密码为65535。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;工具介绍&quot;&gt;&lt;a href=&quot;#工具介绍&quot; class=&quot;headerlink&quot; title=&quot;工具介绍&quot;&gt;&lt;/a&gt;工具介绍&lt;/h1&gt;&lt;p&gt;mimikatz的功能很多，最重要的是能从 lsass.exe进程中获取windows的账号及明文密码。&lt;/p&gt;
+&lt;p&gt;在 </summary>
+      
+    
+    
+    
+    <category term="工具使用" scheme="http://ficay.github.io/categories/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/"/>
+    
+    
+    <category term="密码获取" scheme="http://ficay.github.io/tags/%E5%AF%86%E7%A0%81%E8%8E%B7%E5%8F%96/"/>
+    
+  </entry>
   
   <entry>
     <title>应急响应-Windows挖矿病毒处置</title>
