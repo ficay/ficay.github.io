@@ -2,11 +2,11 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>槐の序</title>
   
-  <subtitle>故事从这里开始</subtitle>
+  <subtitle>The story begins here</subtitle>
   <link href="http://ficay.github.io/atom.xml" rel="self"/>
   
   <link href="http://ficay.github.io/"/>
-  <updated>2022-06-01T01:54:08.466Z</updated>
+  <updated>2022-06-01T05:13:04.048Z</updated>
   <id>http://ficay.github.io/</id>
   
   <author>
@@ -21,11 +21,15 @@
     <link href="http://ficay.github.io/2022/06/01/%E7%AE%80%E5%8D%95%E5%9F%9F%E6%B8%97%E9%80%8F/"/>
     <id>http://ficay.github.io/2022/06/01/%E7%AE%80%E5%8D%95%E5%9F%9F%E6%B8%97%E9%80%8F/</id>
     <published>2022-06-01T01:54:08.000Z</published>
-    <updated>2022-06-01T01:54:08.466Z</updated>
+    <updated>2022-06-01T05:13:04.048Z</updated>
     
     
     
     
+    <category term="渗透测试" scheme="http://ficay.github.io/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+    
+    <category term="域渗透" scheme="http://ficay.github.io/tags/%E5%9F%9F%E6%B8%97%E9%80%8F/"/>
     
   </entry>
   
