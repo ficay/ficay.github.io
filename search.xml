@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>常见Webshell流量特征及常见攻击事件分析</title>
+      <link href="/2022/06/05/%E5%B8%B8%E8%A7%81Webshell%E6%B5%81%E9%87%8F%E7%89%B9%E5%BE%81%E5%88%86%E6%9E%90/"/>
+      <url>/2022/06/05/%E5%B8%B8%E8%A7%81Webshell%E6%B5%81%E9%87%8F%E7%89%B9%E5%BE%81%E5%88%86%E6%9E%90/</url>
+      
+        <content type="html"><![CDATA[<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>Webshell是攻击者留在目标服务器上的后门，通过Webshell管理工具，可以实现目标服务器上Webshell与攻击者进行通信。如果我们把目标看作是服务端（提供服务的一方，接受指令，返回相对应的数据），那么Webshell管理工具可以看作是客户端（被服务的一方，发送指令，等待结果返回），因此我们就可以借助客户端与服务端进行通信时的流量特征，来判断服务器上是否存在后门。</p><p>本文针对以下几种使用较为广泛的Webshell管理工具，详细分析了其流量特征。</p><h1 id="中国菜刀-Chopper"><a href="#中国菜刀-Chopper" class="headerlink" title="中国菜刀(Chopper)"></a>中国菜刀(Chopper)</h1><p>使用Wireshark对菜刀流量抓包，可以看到主要特征在body中：</p><p><img src="/2022/06/05/%E5%B8%B8%E8%A7%81Webshell%E6%B5%81%E9%87%8F%E7%89%B9%E5%BE%81%E5%88%86%E6%9E%90/image-20220611144707319.png" alt="image-20220611144707319"></p><ul><li><p>eval函数用于执行传递的payload。</p></li><li><p>(base64_decode($_POST[z0])) 将payload进行base64解码，菜刀默认是将payload使用base64编码。</p></li><li><p>&amp;z0&#x3D;QGluaV9zZXQ…是传递payload，参数z0对应$_POST[z0]接收到的数据，该参数值是使用Base64编码的，所以可以利用base64解码可以看到攻击明文：</p><p><img src="/2022/06/05/%E5%B8%B8%E8%A7%81Webshell%E6%B5%81%E9%87%8F%E7%89%B9%E5%BE%81%E5%88%86%E6%9E%90/image-20220608210651853.png" alt="image-20220608210651853"></p></li></ul><h1 id="中国蚁剑-AntSword"><a href="#中国蚁剑-AntSword" class="headerlink" title="中国蚁剑(AntSword)"></a>中国蚁剑(AntSword)</h1><p>最明显的特征是@ini_set(“display_erros”,”0”);这段代码基本是所有工具都有的，但蚁剑是明文，所以比较好识别。</p><p><img src="/2022/06/05/%E5%B8%B8%E8%A7%81Webshell%E6%B5%81%E9%87%8F%E7%89%B9%E5%BE%81%E5%88%86%E6%9E%90/image-20220611142602768.png" alt="image-20220611142602768"></p><p>蚁剑的绕过特征流量：数据包以 _0x 开头:</p><p><img src="/2022/06/05/%E5%B8%B8%E8%A7%81Webshell%E6%B5%81%E9%87%8F%E7%89%B9%E5%BE%81%E5%88%86%E6%9E%90/image-20220611143040534.png" alt="image-20220611143040534"></p><h1 id="冰蝎2-0"><a href="#冰蝎2-0" class="headerlink" title="冰蝎2.0"></a>冰蝎2.0</h1><p>1、Accept字段：</p><p>Accept: text&#x2F;html,image&#x2F;gif, image&#x2F;jpeg, *; q&#x3D;.2, &#x2F;q&#x3D;.2</p><p>2、Content-Length字段：</p><p>Content-Length：16</p><p><img src="/2022/06/05/%E5%B8%B8%E8%A7%81Webshell%E6%B5%81%E9%87%8F%E7%89%B9%E5%BE%81%E5%88%86%E6%9E%90/image-20220611143141545.png" alt="image-20220611143141545"></p><p>流量特征共分为2次GET请求，第一次请求服务器产生秘钥写入session，第二次请求用于获取Key。</p><h1 id="冰蝎3-0"><a href="#冰蝎3-0" class="headerlink" title="冰蝎3.0"></a>冰蝎3.0</h1><p>1、Accept字段：</p><p>Accept: text&#x2F;html,application&#x2F;xhtml+xml,application&#x2F;xml;×&#x3D;0. 9 ,image&#x2F;avif,image&#x2F;webp,image&#x2F;apng,<em>&#x2F;</em>;0&#x3D;0.8,application&#x2F;signed-exchange;v&#x3D;b3;q&#x3D;0.9</p><p>2、长连接：</p><p>Connection：keep-alive</p><p>冰蝎通讯默认使用长连接，避免了频繁的握手造成的资源开销。默认情况下，请求头和响应头里会带有 Connection: Keep-Alive</p><p><img src="/2022/06/05/%E5%B8%B8%E8%A7%81Webshell%E6%B5%81%E9%87%8F%E7%89%B9%E5%BE%81%E5%88%86%E6%9E%90/image-20220611132419023.png" alt="image-20220611132419023"></p><h1 id="哥斯拉"><a href="#哥斯拉" class="headerlink" title="哥斯拉"></a>哥斯拉</h1><p>请求含有pass&#x3D;</p><p><img src="/2022/06/05/%E5%B8%B8%E8%A7%81Webshell%E6%B5%81%E9%87%8F%E7%89%B9%E5%BE%81%E5%88%86%E6%9E%90/image-20220611135752715.png" alt="image-20220611135752715"></p><p>通常会使用Base64加密</p><p><img src="/2022/06/05/%E5%B8%B8%E8%A7%81Webshell%E6%B5%81%E9%87%8F%E7%89%B9%E5%BE%81%E5%88%86%E6%9E%90/image-20220611143619243.png" alt="image-20220611143619243"></p><h1 id="CobaltStrike-CS"><a href="#CobaltStrike-CS" class="headerlink" title="CobaltStrike(CS)"></a>CobaltStrike(CS)</h1><p>BeaconEye的核心原理是通过扫描CobaltStrike中的内存特征，并运行BeaconConfig扫描解析出对应的Beacon信息。</p><p><img src="/2022/06/05/%E5%B8%B8%E8%A7%81Webshell%E6%B5%81%E9%87%8F%E7%89%B9%E5%BE%81%E5%88%86%E6%9E%90/image-20220611135927236.png" alt="image-20220611135927236"></p><h1 id="Cknife"><a href="#Cknife" class="headerlink" title="Cknife"></a>Cknife</h1><p>Cknife流量的特征就是在body部分的参数值均为base64编码，将该部分进行base64解码后，其流量特征同中国菜刀一致。</p><h1 id="Weevely"><a href="#Weevely" class="headerlink" title="Weevely"></a>Weevely</h1><p>该流量中的攻击载荷存在于Referer中，其中Referer中的路径中php的查询参数有以下参数名或值，即sa&#x3D;、source&#x3D;web、cd&#x3D;数字、url&#x3D;、ei&#x3D;，即可确定该流量为客户端流量。</p><h1 id="Shiro反序列化漏洞攻击流量"><a href="#Shiro反序列化漏洞攻击流量" class="headerlink" title="Shiro反序列化漏洞攻击流量"></a>Shiro反序列化漏洞攻击流量</h1><p>可以看到该请求是在在登录处，且响应头有rememberme字样，可以判断被攻击网站为使用了Shiro框架。</p><p><img src="/2022/06/05/%E5%B8%B8%E8%A7%81Webshell%E6%B5%81%E9%87%8F%E7%89%B9%E5%BE%81%E5%88%86%E6%9E%90/image-20220611133438718.png" alt="image-20220611133438718"></p><p><img src="/2022/06/05/%E5%B8%B8%E8%A7%81Webshell%E6%B5%81%E9%87%8F%E7%89%B9%E5%BE%81%E5%88%86%E6%9E%90/image-20220611134357090.png" alt="image-20220611134357090"></p><p>攻击者执行了whoami命令，接下来看响应包是否返回了相关信息。</p><p><img src="/2022/06/05/%E5%B8%B8%E8%A7%81Webshell%E6%B5%81%E9%87%8F%E7%89%B9%E5%BE%81%E5%88%86%E6%9E%90/image-20220611133802290.png" alt="image-20220611133802290"></p><p>可以看到服务器已经成功返回了当前用户为root。</p><p><img src="/2022/06/05/%E5%B8%B8%E8%A7%81Webshell%E6%B5%81%E9%87%8F%E7%89%B9%E5%BE%81%E5%88%86%E6%9E%90/image-20220611133950104.png" alt="image-20220611133950104"></p><h1 id="FastJson反序列化攻击流量"><a href="#FastJson反序列化攻击流量" class="headerlink" title="FastJson反序列化攻击流量"></a>FastJson反序列化攻击流量</h1><p><img src="/2022/06/05/%E5%B8%B8%E8%A7%81Webshell%E6%B5%81%E9%87%8F%E7%89%B9%E5%BE%81%E5%88%86%E6%9E%90/image-20220611150331514.png" alt="image-20220611150331514"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 应急响应 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Webshell </tag>
+            
+            <tag> 流量分析 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>简单域渗透</title>
       <link href="/2022/06/01/%E7%AE%80%E5%8D%95%E5%9F%9F%E6%B8%97%E9%80%8F/"/>
       <url>/2022/06/01/%E7%AE%80%E5%8D%95%E5%9F%9F%E6%B8%97%E9%80%8F/</url>
