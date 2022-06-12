@@ -1,3 +1,4 @@
+http://ficay.github.io/2022/06/12/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94-%E5%8B%92%E7%B4%A2%E7%97%85%E6%AF%92%E5%A4%84%E7%BD%AE/
 http://ficay.github.io/2022/06/05/%E5%B8%B8%E8%A7%81Webshell%E6%B5%81%E9%87%8F%E7%89%B9%E5%BE%81%E5%88%86%E6%9E%90/
 http://ficay.github.io/2022/06/01/%E7%AE%80%E5%8D%95%E5%9F%9F%E6%B8%97%E9%80%8F/
 http://ficay.github.io/2022/05/26/mimikatz%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/
@@ -19,6 +20,7 @@ http://ficay.github.io/tags/%E6%8C%96%E7%9F%BF%E7%97%85%E6%AF%92/
 http://ficay.github.io/tags/%E5%9F%9F%E6%B8%97%E9%80%8F/
 http://ficay.github.io/tags/Webshell/
 http://ficay.github.io/tags/%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/
+http://ficay.github.io/tags/%E5%8B%92%E7%B4%A2%E7%97%85%E6%AF%92/
 http://ficay.github.io/categories/%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/
 http://ficay.github.io/categories/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/
 http://ficay.github.io/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/
